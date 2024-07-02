@@ -38,6 +38,13 @@ bool H264Decoder::Configure(const Settings& settings)
 	{
 		return false;
 	}
+    
+    _ctx->delay = 0;
+    _ctx->max_samples = 1;
+    _ctx->has_b_frames = 0;
+    _ctx->thread_count = 1;
+    _ctx->skip_alpha = true;
+    _ctx->flags = AV_CODEC_FLAG_LOW_DELAY;
 
 	if (avcodec_open2(_ctx, _codec, nullptr) != 0)
 	{
@@ -149,6 +156,7 @@ int32_t H264Decoder::Release()
 int H264Decoder::_ReadFrame(const webrtc::EncodedImage& input_image,
 							int64_t render_time_ms)
 {
+    av_frame_unref(_frame);
 	if (avcodec_receive_frame(_ctx, _frame) != 0)
 	{
 		return -1;

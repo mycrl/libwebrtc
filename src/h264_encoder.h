@@ -101,7 +101,6 @@ private:
 	AVCodecContext* _ctx = nullptr;
 	AVPacket* _packet = nullptr;
 	AVFrame* _frame = nullptr;
-	size_t _frame_num = 0;
 };
 
 #endif // LIBRTC_H264_DECODER_H

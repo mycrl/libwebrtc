@@ -29,18 +29,19 @@ typedef struct
 {
 	const std::string name;
 	AVHWDeviceType type;
+    bool is_encoder;
 } CodecDesc;
 
 static CodecDesc VideoDecoders[] = {
-	{"h264_qsv", AV_HWDEVICE_TYPE_QSV},
-	{"h264_cuvid", AV_HWDEVICE_TYPE_CUDA},
-	{"h264_videotoolbox", AV_HWDEVICE_TYPE_VIDEOTOOLBOX},
+	{"h264_qsv", AV_HWDEVICE_TYPE_QSV, true},
+	{"h264_cuvid", AV_HWDEVICE_TYPE_CUDA, true},
+	{"h264_videotoolbox", AV_HWDEVICE_TYPE_VIDEOTOOLBOX, true},
 };
 
 static CodecDesc VideoEncoders[] = {
-	{"h264_qsv", AV_HWDEVICE_TYPE_QSV},
-	{"h264_nvenc", AV_HWDEVICE_TYPE_CUDA},
-	{"h264_videotoolbox", AV_HWDEVICE_TYPE_VIDEOTOOLBOX},
+	{"h264_qsv", AV_HWDEVICE_TYPE_QSV, false},
+	{"h264_nvenc", AV_HWDEVICE_TYPE_CUDA, false},
+	{"h264_videotoolbox", AV_HWDEVICE_TYPE_VIDEOTOOLBOX, false},
 };
 
 constexpr webrtc::ScalabilityMode IkSupportedScalabilityModes[] = {
@@ -58,9 +59,11 @@ std::vector<webrtc::SdpVideoFormat> supported_h264_codecs(bool mode /* add_scala
 template <size_t S>
 const std::string find_codec(CodecDesc(&codecs)[S])
 {
+    bool is_encoder;
 	AVBufferRef* ctx = nullptr;
 	for (auto codec : codecs)
 	{
+        is_encoder = codec.is_encoder;
 		if (av_hwdevice_ctx_create(&ctx, codec.type, nullptr, nullptr, 0) == 0)
 		{
 			av_buffer_unref(&ctx);
@@ -73,7 +76,7 @@ const std::string find_codec(CodecDesc(&codecs)[S])
 		av_buffer_unref(&ctx);
 	}
 
-	return "libx264";
+	return is_encoder ? "libx264" : "h264";
 }
 
 #endif // LIBRTC_H264_H
