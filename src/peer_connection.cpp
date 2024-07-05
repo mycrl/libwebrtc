@@ -43,8 +43,8 @@ RTCPeerConnection* rtc_create_peer_connection(RTCPeerConnectionConfigure* c_conf
                                                           nullptr, // IAudioDeviceModule::Create(),
                                                           webrtc::CreateBuiltinAudioEncoderFactory(),
                                                           webrtc::CreateBuiltinAudioDecoderFactory(),
-                                                          IVideoEncoderFactory::Create(),
-                                                          IVideoDecoderFactory::Create(),
+                                                          IVideoEncoderFactory::New(),
+                                                          IVideoDecoderFactory::New(),
                                                           nullptr,
                                                           nullptr);
     if (!rtc->pc_factory)

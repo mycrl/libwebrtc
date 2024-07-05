@@ -149,7 +149,6 @@ int H264Encoder::InitEncode(const webrtc::VideoCodec* codec_settings,
 		return -1;
 	}
 
-	_frame_num = 0;
 	_frame->width = _ctx->width;
 	_frame->height = _ctx->height;
 	_frame->format = _ctx->pix_fmt;
@@ -305,7 +304,7 @@ int H264Encoder::_ReadPacket(webrtc::VideoFrameType frame_type,
 	_image._frameType = frame_type;
 	_image._encodedWidth = _ctx->width;
 	_image._encodedHeight = _ctx->height;
-	_image.SetTimestamp(frame.timestamp());
+	_image.SetRtpTimestamp(frame.timestamp());
 	_image.ntp_time_ms_ = frame.ntp_time_ms();
 	_image.capture_time_ms_ = frame.render_time_ms();
 	_image.rotation_ = frame.rotation();

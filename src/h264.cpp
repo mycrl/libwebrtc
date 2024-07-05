@@ -34,10 +34,5 @@ webrtc::SdpVideoFormat create_h264_format(webrtc::H264Profile profile,
 
 std::vector<webrtc::SdpVideoFormat> supported_h264_codecs(bool mode)
 {
-	return { create_h264_format(webrtc::H264Profile::kProfileBaseline, webrtc::H264Level::kLevel3_1, "1", mode),
-		create_h264_format(webrtc::H264Profile::kProfileBaseline, webrtc::H264Level::kLevel3_1, "0", mode),
-		create_h264_format(webrtc::H264Profile::kProfileConstrainedBaseline, webrtc::H264Level::kLevel3_1, "1", mode),
-		create_h264_format(webrtc::H264Profile::kProfileConstrainedBaseline, webrtc::H264Level::kLevel3_1, "0", mode),
-		create_h264_format(webrtc::H264Profile::kProfileMain, webrtc::H264Level::kLevel3_1, "1", mode),
-		create_h264_format(webrtc::H264Profile::kProfileMain, webrtc::H264Level::kLevel3_1, "0", mode) };
+	return { create_h264_format(webrtc::H264Profile::kProfileBaseline, webrtc::H264Level::kLevel3_1, "1", mode) };
 }

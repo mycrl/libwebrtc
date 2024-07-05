@@ -10,6 +10,8 @@
 #pragma once
 
 #include "modules/video_coding/codecs/h264/include/h264.h"
+#include "modules/video_coding/include/video_error_codes.h"
+#include "media/base/media_constants.h"
 
 #include <string>
 #include <optional>

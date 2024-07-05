@@ -20,7 +20,7 @@ IVideoEncoderFactory::IVideoEncoderFactory()
 	}
 }
 
-std::unique_ptr<IVideoEncoderFactory> IVideoEncoderFactory::Create()
+std::unique_ptr<IVideoEncoderFactory> IVideoEncoderFactory::New()
 {
 	return std::make_unique<IVideoEncoderFactory>();
 }
@@ -30,7 +30,8 @@ std::vector<webrtc::SdpVideoFormat> IVideoEncoderFactory::GetSupportedFormats() 
 	return _formats;
 }
 
-std::unique_ptr<webrtc::VideoEncoder> IVideoEncoderFactory::CreateVideoEncoder(const webrtc::SdpVideoFormat& format)
+std::unique_ptr<webrtc::VideoEncoder> IVideoEncoderFactory::Create(const webrtc::Environment& env, 
+																   const webrtc::SdpVideoFormat& format)
 {
 	return H264Encoder::Create(format);
 }

@@ -16,14 +16,15 @@ class IVideoEncoderFactory
 {
 public:
 	IVideoEncoderFactory();
-	static std::unique_ptr<IVideoEncoderFactory> Create();
+	static std::unique_ptr<IVideoEncoderFactory> New();
 
 	// Returns a list of supported video formats in order of preference, to use
 	// for signaling etc.
 	std::vector<webrtc::SdpVideoFormat> GetSupportedFormats() const;
 
 	// Creates a VideoEncoder for the specified format.
-	std::unique_ptr<webrtc::VideoEncoder> CreateVideoEncoder(const webrtc::SdpVideoFormat& format);
+	std::unique_ptr<webrtc::VideoEncoder> Create(const webrtc::Environment& env, 
+												 const webrtc::SdpVideoFormat& format);
 private:
 	std::vector<webrtc::SdpVideoFormat> _formats;
 };

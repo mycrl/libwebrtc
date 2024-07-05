@@ -19,7 +19,7 @@ IVideoDecoderFactory::IVideoDecoderFactory()
 	}
 }
 
-std::unique_ptr<IVideoDecoderFactory> IVideoDecoderFactory::Create()
+std::unique_ptr<IVideoDecoderFactory> IVideoDecoderFactory::New()
 {
 	return std::make_unique<IVideoDecoderFactory>();
 }
@@ -29,7 +29,8 @@ std::vector<webrtc::SdpVideoFormat> IVideoDecoderFactory::GetSupportedFormats() 
 	return _formats;
 }
 
-std::unique_ptr<webrtc::VideoDecoder> IVideoDecoderFactory::CreateVideoDecoder(const webrtc::SdpVideoFormat& format)
+std::unique_ptr<webrtc::VideoDecoder> IVideoDecoderFactory::Create(const webrtc::Environment& env, 
+																   const webrtc::SdpVideoFormat& format)
 {
 	return H264Decoder::Create();
 }

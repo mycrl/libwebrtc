@@ -5,9 +5,6 @@ project(rtc)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Enable static library option.
-option(USE_STATIC "Enable static library" OFF)
-
 # Default build target is Debug.
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -130,17 +127,17 @@ if(APPLE)
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
     set(FFMPEG_PREFIX ${FFMPEG_PREFIX})
 elseif(WIN32)
-    if (NOT EXISTS "${THIRD_PARTY_DIR}/ffmpeg-5.1.2-full_build-shared")
+    if (NOT EXISTS "${THIRD_PARTY_DIR}/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1")
         execute_process(
             WORKING_DIRECTORY "${THIRD_PARTY_DIR}"
             COMMAND powershell.exe -Command "Invoke-WebRequest \
-                                                -Uri https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.1.2-full_build-shared.7z \
-                                                -OutFile ffmpeg.7z; \
-                                             7z x ffmpeg.7z -aoa; \
-                                             del ffmpeg.7z")
+                                                -Uri https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2024-07-02-12-52/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1.zip \
+                                                -OutFile ffmpeg.zip; \
+                                             Expand-Archive -Path ffmpeg.zip -DestinationPath ./ -Force; \
+                                             del ffmpeg.zip")
     endif()
     
-    set(FFMPEG_PREFIX "${THIRD_PARTY_DIR}/ffmpeg-5.1.2-full_build-shared")
+    set(FFMPEG_PREFIX "${THIRD_PARTY_DIR}/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1")
 else()
     set(FFMPEG_PREFIX $ENV{FFMPEG_PREFIX})
 endif()
@@ -184,12 +181,7 @@ set(SOURCES
     src/h264_decoder.h
     src/h264_decoder.cpp)
 
-if (USE_STATIC)
-    add_library(rtc STATIC ${SOURCES})
-else()
-    add_library(rtc SHARED ${SOURCES})
-endif()
-
+add_library(rtc STATIC ${SOURCES})
 
 # Add third-party libraries to the search path.
 include_directories("${THIRD_PARTY_DIR}/webrtc/src/third_party/libyuv/include"
@@ -208,42 +200,25 @@ target_link_libraries(rtc
 
 # If it is WIN32, you need to set the runtime library.
 if(MSVC)
-    if(CMAKE_BUILD_TYPE STREQUAL "Release")
-        set_property(TARGET rtc PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded)
-    else()
-        set_property(TARGET rtc PROPERTY MSVC_RUNTIME_LIBRARY MultiThreadedDebug)
-    endif()
-endif()
-
-# Debug/Release target in build header.
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_compile_definitions(NDEBUG)
-else()
-    add_compile_definitions(DEBUG)
+    set_property(TARGET rtc PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded)
 endif()
 
 # Build header.
 if(WIN32)
-    add_compile_definitions(_CONSOLE
-                            USE_AURA=1
+    add_compile_definitions(USE_AURA=1
                             _HAS_EXCEPTIONS=0
                             __STD_C
                             _CRT_RAND_S
-                            _CRT_SECURE_NO_DEPRECATE
-                            _SCL_SECURE_NO_DEPRECATE
                             _ATL_NO_OPENGL
-                            _WINDOWS
                             CERT_CHAIN_PARA_HAS_EXTRA_FIELDS
                             PSAPI_VERSION=2
                             WIN32
                             _SECURE_ATL
-                            WINUWP
                             __WRL_NO_DEFAULT_LIB__
                             WINAPI_FAMILY=WINAPI_FAMILY_PC_APP
                             WIN10=_WIN32_WINNT_WIN10
                             WIN32_LEAN_AND_MEAN
                             NOMINMAX
-                            _UNICODE
                             UNICODE
                             NTDDI_VERSION=NTDDI_WIN10_RS2
                             _WIN32_WINNT=0x0A00

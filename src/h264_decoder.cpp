@@ -204,7 +204,7 @@ int H264Decoder::_ReadFrame(const webrtc::EncodedImage& input_image,
 	webrtc::VideoFrame frame(_i420_buffer.value(),
 							 webrtc::kVideoRotation_0,
 							 render_time_ms * rtc::kNumMicrosecsPerMillisec);
-	frame.set_timestamp(input_image.Timestamp());
+	frame.set_timestamp(input_image.RtpTimestamp());
 	frame.set_ntp_time_ms(input_image.ntp_time_ms_);
 	if (_callback.has_value())
 	{

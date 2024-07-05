@@ -251,11 +251,6 @@ CreateDescObserver* CreateDescObserver::Create(CreateDescCallback callback, void
 void CreateDescObserver::OnSuccess(webrtc::SessionDescriptionInterface* desc)
 {
     auto res = into_c(desc);
-    if (!res)
-    {
-        _callback("malloc failed", nullptr, _ctx);
-    }
-
     _callback(nullptr, res, _ctx);
     free_session_description(res);
 }
