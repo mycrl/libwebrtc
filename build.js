@@ -40,14 +40,11 @@ for (const path of [
 await Command(`cmake -DCMAKE_BUILD_TYPE=${Profile} ..`, { cwd: join(__dirname, './build') })
 await Command(`cmake --build . --config=${Profile}`, { cwd: join(__dirname, './build') })
 await Command([
-    'cmd.exe /k "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat" -startdir=none -arch=x64 -host_arch=x64;',
-    [
-        'lib /out:rtc.lib',
-        `./${Profile}/rtc.lib`,
-        '../third_party/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1/lib/avcodec.lib',
-        '../third_party/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1/lib/avutil.lib',
-        `../third_party/webrtc/src/out/${Profile}/obj/webrtc.lib`,
-    ].join(' '),
-].join(';'), { cwd: join(__dirname, './build') })
+    'lib /out:rtc.lib',
+    `./${Profile}/rtc.lib`,
+    '../third_party/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1/lib/avcodec.lib',
+    '../third_party/ffmpeg-n6.1.1-156-g69bcdb4575-win64-lgpl-shared-6.1/lib/avutil.lib',
+    `../third_party/webrtc/src/out/${Profile}/obj/webrtc.lib`,
+].join(' '), { cwd: join(__dirname, './build') })
 
 /* async block end */ })()
